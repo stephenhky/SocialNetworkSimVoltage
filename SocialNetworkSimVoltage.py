@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Apr 12 13:24:00 2013
+Created on Thu Dec 27 16:00:15 2012
 
-@author: Kwan-Yuet Ho, Ph.D.
+@author: hok1
 """
 
 import networkx as nx
 
-class SocialNetworkSimVoltage():
+class SocialNetworkSimVoltage:
     def __init__(self):
         nodes = ['Stephen', 'Sinnie', 'Elaine']
         edges = [('Stephen', 'Sinnie', 0.2),
@@ -147,7 +147,7 @@ class SocialNetworkSimVoltage():
         return nx.shortest_path_length(self.wordNet, person1, person2,
                                        weight='weight')
         
-class StephenWordNetworkSimVoltage(SocialNetworkSimVoltage):
+class StephenSocialNetworkSimVoltage(SocialNetworkSimVoltage):
     def __init__(self):
         nodes = ['Stephen', 'John', 'Mary',
                  'Joshua',
@@ -194,7 +194,7 @@ class StephenWordNetworkSimVoltage(SocialNetworkSimVoltage):
         self.initializeClass(nodes, edges)
 
 def testrun():
-    wn1 = StephenWordNetworkSimVoltage()
+    wn1 = StephenSocialNetworkSimVoltage()
     for word in wn1.wordNet:
         resistance = wn1.getResistance('Stephen', word)
         print('Stephen -> %s : %.4f' % (word, resistance))
