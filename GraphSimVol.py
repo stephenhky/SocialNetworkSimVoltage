@@ -45,8 +45,20 @@ class GraphSimVoltage:
         matB[len(self.edges), self.nodesIdx[node2]] = 1
         
     def solveLinSystem(self, node1, node2):
-        # vector: (currents, voltages, R, potentials)
+        # vector: (currents, voltages, potentials)
         matB = self.calculateIncidenceMatrix(node1, node2)
         
         # square matrix
-        matM = np.matrix()
+        ndim = 2 * len(self.edges) + len(self.nodes) - 2
+        matM = np.matrix(np.zeros([ndim, ndim]))
+        
+        # B*I = 0
+        for i in range(len(self.edges)+1):
+            for j in range(len(self.nodes)):
+                matM[i, j] = matB[j, i]
+                
+        # BP-V = 0
+        for di in range(len(self.edges)+1, 2*len(self.edges)+1):
+            matM[di, di] = -1
+
+        
