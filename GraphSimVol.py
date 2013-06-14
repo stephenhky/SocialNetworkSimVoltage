@@ -44,41 +44,49 @@ class GraphSimVoltage:
         matB[len(self.edges), self.nodesIdx[node1]] = -1
         matB[len(self.edges), self.nodesIdx[node2]] = 1
         
+        return matB
+        
     def solveLinSystem(self, node1, node2):
         # vector: (currents, voltages, potentials)
+        # # unknowns: (len(self.edges)+1, len(self.edges)+1, len(self.nodes)-2)
         matB = self.calculateIncidenceMatrix(node1, node2)
         node1Idx = self.nodesIdx[node1]
         node2Idx = self.nodesIdx[node2]
         
         # square matrix
-        ndim = 2 * len(self.edges) + len(self.nodes) - 2
+        ndim = 2 * len(self.edges) + len(self.nodes)
         matM = np.matrix(np.zeros([ndim, ndim]))
-        vecb = np.matrix(np.zeros(ndim))
+        vecb = np.zeros(ndim)
         
         # B*I = 0
-        for i in range(len(self.edges)+1):
-            for j in range(len(self.nodes)):
+        # number of eqns: len(self.nodes)
+        for i in range(len(self.nodes)):
+            for j in range(len(self.edges)+1):
                 matM[i, j] = matB[j, i]
                 
         # BP-V = 0
-        for di in range(len(self.nodes), len(self.nodes)+len(self.edges)+1):
-            matM[di, di] = -1
-        for i, di in zip(range(len(self.edges)+1), 
-                         range(len(self.nodes),
-                               len(self.nodes)+len(self.edges)+1)):
-            zeroj = len(self.nodes) + len(self.edges) + 1
+        # number of eqns: len(self.edges)
+        for i, di in zip(range(len(self.edges)), 
+                         range(len(self.nodes), 
+                               len(self.nodes)+len(self.edges))):
+            matM[di, i+len(self.edges)+1] = -1.
             for j in range(len(self.nodes)):
-                pj = zeroj + j
                 if j == node1Idx or j == node2Idx:
-                    vecb[di] += matB[i, j] if j == node1Idx else 0
+                    vecb[di] = matB[i, j] if j == node1Idx else 0
                 else:
+                    pjzero = 2 * len(self.edges) + 2
+                    pj = pjzero + j
                     pj -= 1 if j > node1Idx else 0
                     pj -= 1 if j > node2Idx else 0
                     matM[di, pj] = matB[i, j]
                     
         # IR-V = 0
-        for i, di in zip(range(len(self.edges)),
-                         range(len(self.nodes)+len(self.edges)+1,
-                               len(self.nodes)+2*len(self.edges)+1)):
-            pass
+        # number of eqns: len(self.edges)
+        for i in range(len(self.edges)):
+            di = len(self.nodes) + len(self.edges) + i
+            vi = len(self.edges) + 1 + i
+            matM[di, i] = self.edges[i][2]
+            matM[di, vi] = -1.
+            
+        return matM
         
