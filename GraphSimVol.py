@@ -13,6 +13,7 @@ class NodeNotExistException(Exception):
 
 class GraphSimVoltage:
     def __init__(self):
+        '''
         nodes = ['Stephen', 'Sinnie', 'Elaine']
         edges = [('Stephen', 'Sinnie', 0.2),
                  ('Sinnie', 'Stephen', 0.2),
@@ -20,6 +21,9 @@ class GraphSimVoltage:
                  ('Elaine', 'Sinnie', 0.2),
                  ('Stephen', 'Elaine', 1.1),
                  ('Elaine', 'Stephen', 1.2)]
+        '''
+        nodes = ['Stephen', 'Sinnie']
+        edges = [('Stephen', 'Sinnie', 0.54)]
         self.initializeClass(nodes, edges)
     
     def initializeClass(self, nodes, edges):
@@ -92,3 +96,7 @@ class GraphSimVoltage:
         
         return np.array(matM), vecb
         
+    def getResistance(self, node1, node2):
+        matM, vecb = self.solveLinSystem(node1, node2)
+        vecX = np.linalg.solve(matM, vecb)
+        return 1/vecX[-1]
