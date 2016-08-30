@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Sep  4 17:15:45 2013
 
-@author: hok1
-"""
 
 '''
 Get the resistance distance matrix of a simple undirected network.

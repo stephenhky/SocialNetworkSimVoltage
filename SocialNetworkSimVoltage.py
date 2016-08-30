@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Dec 27 16:00:15 2012
-
-@author: hok1
-"""
 
 import networkx as nx
 
