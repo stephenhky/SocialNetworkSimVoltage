@@ -1,4 +1,6 @@
 
+import csv
+
 import networkx as nx
 
 class SocialNetworkSimVoltage:
@@ -157,12 +159,12 @@ class StephenSocialNetworkSimVoltage(SocialNetworkSimVoltage):
                  ('Andrew', 'Abigail', 1),
                  ('Abigail', 'Andrew', 1),
                  ('John', 'Stephen', 1),
-                 ('Andrew', 'John', 1),
-                 ('John', 'Andrew', 1),
+                 ('Andrew', 'John', 0.4),
+                 ('John', 'Andrew', 0.6),
                  ('Abigail', 'John', 1), 
                  ('John', 'Abigail', 1),
                  ('John', 'Mary', 1),
-                 ('Mary', 'John', 1),
+                 ('Mary', 'John', 0.9),
                  ('John', 'Joshua', 1),
                  ('Joshua', 'John', 1),
                  ('John', 'Jacob', 1),
@@ -176,8 +178,8 @@ class StephenSocialNetworkSimVoltage(SocialNetworkSimVoltage):
                  ('Melanie', 'Stephen', 1),
                  ('Stephen', 'Melanie', 1),
                  ('Melanie', 'Shirley', 1),
-                 ('Shirley', 'Urban', 1),
-                 ('Urban', 'Shirley', 1),
+                 ('Shirley', 'Urban', 0.2),
+                 ('Urban', 'Shirley', 0.21),
                  ('Susan', 'Shirley', 1),
                  ('Shirley', 'Susan', 1),
                  ('Shirley', 'Zoe', 1),
@@ -195,6 +197,21 @@ def testrun():
     for word in wn1.wordNet:
         resistance = wn1.getResistance(word, 'Stephen')
         print('%s -> Stephen : %.4f' % (word, resistance))
+
+def output_to_file(filename):
+    outputfile = open(filename, 'wb')
+    writer = csv.writer(outputfile)
+    wn1 = StephenSocialNetworkSimVoltage()
+    for word in wn1.wordNet:
+        resistance = wn1.getResistance('Stephen', word)
+        writer.writerow(['Stephen', word, resistance])
+    for word in wn1.wordNet:
+        resistance = wn1.getResistance(word, 'Stephen')
+        writer.writerow([word, 'Stephen', resistance])
+    outputfile.close()
+
                                                              
 if __name__ == '__main__':
     testrun()
+    filepath = raw_input('output file? ')
+    output_to_file(filepath)
