@@ -86,8 +86,8 @@ class SocialNetworkSimVoltage:
                 elif (volDict[node] < 0.0) or (volDict[node] > 1.0):
                     tempVolDict[node] = 10.0
                 else:
-                    predNodes = self.wordNet.predecessors(node)
-                    succNodes = self.wordNet.successors(node)
+                    predNodes = list(self.wordNet.predecessors(node))
+                    succNodes = list(self.wordNet.successors(node))
                     in_current = 0.0
                     out_current = 0.0
                     for pred in predNodes:
