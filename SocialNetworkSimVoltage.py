@@ -68,6 +68,8 @@ class SocialNetworkSimVoltage:
                     distFrom1 = float(self.getShortestDist(person1, node))
                     distFrom2 = float(self.getShortestDist(node, person2))
                     volDict[node] = distFrom2 / (distFrom1 + distFrom2)
+        if printVol:
+            print volDict
         tempVolDict = {}
         for node in self.wordNet:
             tempVolDict[node] = volDict[node]
@@ -99,7 +101,7 @@ class SocialNetworkSimVoltage:
                             if volDict[node] > volDict[succ]:
                                 potDiff = volDict[node] - volDict[succ]
                                 resEdge = self.wordNet[node][succ]['weight']
-                                out_current += potDiff
+                                out_current += potDiff / resEdge
                     if abs(in_current - out_current) > self.errTol:
                         sumVOverR = 0.0
                         numRecR = 0
